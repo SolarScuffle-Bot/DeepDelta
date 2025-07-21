@@ -185,7 +185,7 @@ Module.clone = deepClone
 	local diff = DeepDelta.diff(data, oldData)
 	```
 ]]
-function Module.diff(new, old)
+function Module.diff(new: any & {}, old: any & {})
     assert(type(new) == "table" and type(old) == "table")
 
     local cursor = Cursor.new()
@@ -203,7 +203,7 @@ end
 	DataChanged:Fire(data, oldData)
 	```
 ]]
-function Module.apply(target, diff: buffer)
+function Module.apply(target: any & {}, diff: buffer)
     assert(type(target) == "table")
 
     local cursor = Cursor.frombuffer(diff)
