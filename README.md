@@ -1,4 +1,7 @@
 # DeepDelta
+
+![DeepDeltaLogo_1024x484](/Assets/DeepDelta_1024x484.webp)
+
 Similar to the DeltaCompress module, but supporting nested tables.
 
 ## API
