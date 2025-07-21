@@ -1,6 +1,6 @@
 --!strict
 
-local Cursor = require("./cursor")
+local Cursor = require("./Cursor")
 
 -- value type codes
 local TY_NIL = 0

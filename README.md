@@ -2,6 +2,8 @@
 
 A Luau library that serializes nested table diffs into buffers. Similar to [DeltaCompress](https://nezuo.github.io/delta-compress/), but supporting nested tables. Future updates to improve compression size are likely.
 
+Available on [Wally](https://wally.run/package/solarscuffle-bot/deep-delta?version=1.0.0)
+
 ## API
 `DeepDelta.clone(tab: T): T`
 

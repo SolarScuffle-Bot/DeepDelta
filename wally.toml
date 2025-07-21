@@ -1,0 +1,19 @@
+[package]
+name = "solarscuffle-bot/deep-delta"
+version = "1.0.0"
+registry = "https://github.com/UpliftGames/wally-index"
+licence = "MIT"
+authors = ["Sona"]
+
+description = "A Luau library that serializes nested table diffs into buffers."
+
+realm = "shared"
+
+exclude = ["**"]
+include = [
+    "src/**",
+    "LICENSE",
+    "wally.toml",
+]
+
+[dependencies]
