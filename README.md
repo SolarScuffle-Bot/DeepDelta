@@ -2,7 +2,7 @@
 
 ![DeepDeltaLogo_1024x484](/Assets/DeepDelta_1024x484.webp)
 
-Similar to the DeltaCompress module, but supporting nested tables.
+A Luau library that serializes nested table diffs into buffers. Similar to [DeltaCompress](https://nezuo.github.io/delta-compress/), but supporting nested tables. Future updates to improve compression size are likely.
 
 ## API
 `DeepDelta.clone(tab: T): T`
