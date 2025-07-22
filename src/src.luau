@@ -190,7 +190,6 @@ function Module.diff(new: any & {}, old: any & {})
 
     local cursor = Cursor.new()
     pushdiff(cursor, new, old)
-    cursor:print()
     return Cursor.tobuffer(cursor)
 end
 
