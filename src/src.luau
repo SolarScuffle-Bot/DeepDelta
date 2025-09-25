@@ -10,12 +10,13 @@ local TY_TRUE = 3
 local TY_FALSE = 4
 local TY_TABLE = 5
 local TY_NEST = 6
+local TY_VECTOR = 7
 
 local Module = {}
 
 local pushtab, poptab
 
-local function pushvalue(cursor: Cursor.Cursor, val: nil | string | number | boolean | (any & {}))
+local function pushvalue(cursor: Cursor.Cursor, val: nil | string | number | boolean | vector | (any & {}))
 	local keyType = type(val)
 	assert(keyType ~= "function" and keyType ~= "thread" and keyType ~= "userdata")
 
@@ -34,12 +35,15 @@ local function pushvalue(cursor: Cursor.Cursor, val: nil | string | number | boo
 	elseif type(val) == "table" then
 		pushtab(cursor, val)
 		Cursor.pushu1(cursor, TY_TABLE)
+	elseif type(val) == "vector" then
+		Cursor.pushvector3f4(cursor, val)
+		Cursor.pushu1(cursor, TY_VECTOR)
 	else
 		error(`Invalid key {val} : {type(val)}`)
 	end
 end
 
-local function popvalue(cursor: Cursor.Cursor, ty: number): nil | string | number | boolean | (any & {})
+local function popvalue(cursor: Cursor.Cursor, ty: number): nil | string | number | boolean | vector | (any & {})
 	if ty == TY_NIL then
 		return nil
 	elseif ty == TY_TRUE then
@@ -52,6 +56,8 @@ local function popvalue(cursor: Cursor.Cursor, ty: number): nil | string | numbe
 		return Cursor.popstr(cursor)
 	elseif ty == TY_TABLE then
 		return poptab(cursor)
+	elseif ty == TY_VECTOR then
+		return Cursor.popvector3f4(cursor)
 	else
 		error(`Invalid kind {ty}`)
 	end
@@ -119,9 +125,7 @@ local function pushdiff(cursor: Cursor.Cursor, deltas, new, old)
 		end
 	end
 
-	if length > 0 then
-		Cursor.pushvlq(cursor, length)
-	end
+	Cursor.pushvlq(cursor, length)
 
 	return length
 end

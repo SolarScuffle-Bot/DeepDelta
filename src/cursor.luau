@@ -401,13 +401,13 @@ end
 local function pushbool(cursor: Cursor, a: boolean, b: boolean?, c: boolean?, d: boolean?, e: boolean?, f: boolean?, g: boolean?, h: boolean?): Cursor
 	pushu1(cursor,
 		if a then 1 else 0 +
-		if b then 2 else 0 +
-		if c then 4 else 0 +
-		if d then 8 else 0 +
-		if e then 16 else 0 +
-		if f then 32 else 0 +
-		if g then 64 else 0 +
-		if h then 128 else 0
+			if b then 2 else 0 +
+			if c then 4 else 0 +
+			if d then 8 else 0 +
+			if e then 16 else 0 +
+			if f then 32 else 0 +
+			if g then 64 else 0 +
+			if h then 128 else 0
 	)
 	return cursor
 end
@@ -420,13 +420,31 @@ local function popbool(cursor: Cursor): (boolean, boolean, boolean, boolean, boo
 	local x = popu1(cursor)
 	return
 		(x / 1) % 2 >= 1,
-		(x / 2) % 2 >= 1,
-		(x / 4) % 2 >= 1,
-		(x / 8) % 2 >= 1,
-		(x / 16) % 2 >= 1,
-		(x / 32) % 2 >= 1,
-		(x / 64) % 2 >= 1,
-		(0 / 128) % 2 >= 1
+	(x / 2) % 2 >= 1,
+	(x / 4) % 2 >= 1,
+	(x / 8) % 2 >= 1,
+	(x / 16) % 2 >= 1,
+	(x / 32) % 2 >= 1,
+	(x / 64) % 2 >= 1,
+	(0 / 128) % 2 >= 1
+end
+
+--[=[
+	@within Cursor
+	Pushes 3 f4s, one for each component of the vector.
+]=]
+local function pushvector3f4(cursor: Cursor, x: vector)
+	pushf4(cursor, x.z)
+	pushf4(cursor, x.y)
+	pushf4(cursor, x.x)
+end
+
+--[=[
+	@within Cursor
+	Pops 3 f4s, one for each component of the vector.
+]=]
+local function popvector3f4(cursor: Cursor)
+	return vector.create(popf4(cursor), popf4(cursor), popf4(cursor))
 end
 
 --[=[
@@ -638,6 +656,9 @@ local methods = {
 	pushbool = pushbool,
 	popbool = popbool,
 
+	pushvector3f4 = pushvector3f4,
+	popvector3f4 = popvector3f4,
+
 	pushstr = pushstr,
 	popstr = popstr,
 
@@ -765,6 +786,9 @@ return {
 
 	pushbool = pushbool,
 	popbool = popbool,
+
+	pushvector3f4 = pushvector3f4,
+	popvector3f4 = popvector3f4,
 
 	pushstr = pushstr,
 	popstr = popstr,
