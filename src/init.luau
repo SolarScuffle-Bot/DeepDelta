@@ -1,6 +1,6 @@
 --!strict
 
-local Cursor = require("./Cursor")
+local Cursor = require("@self/Cursor")
 
 -- value type codes
 local TY_NIL = 0
@@ -21,21 +21,28 @@ local function pushvalue(cursor: Cursor.Cursor, val: nil | string | number | boo
 	assert(keyType ~= "function" and keyType ~= "thread" and keyType ~= "userdata")
 
 	if val == nil then
+		Cursor.tryrealloc(cursor, 1)
 		Cursor.pushu1(cursor, TY_NIL)
 	elseif val == true then
+		Cursor.tryrealloc(cursor, 1)
 		Cursor.pushu1(cursor, TY_TRUE)
 	elseif val == false then
+		Cursor.tryrealloc(cursor, 1)
 		Cursor.pushu1(cursor, TY_FALSE)
 	elseif type(val) == "number" then
+		Cursor.tryrealloc(cursor, 9)
 		Cursor.pushf8(cursor, val)
 		Cursor.pushu1(cursor, TY_NUMBER)
 	elseif type(val) == "string" then
 		Cursor.pushstr(cursor, val)
+		Cursor.tryrealloc(cursor, 1)
 		Cursor.pushu1(cursor, TY_STRING)
 	elseif type(val) == "table" then
 		pushtab(cursor, val)
+		Cursor.tryrealloc(cursor, 1)
 		Cursor.pushu1(cursor, TY_TABLE)
 	elseif type(val) == "vector" then
+		Cursor.tryrealloc(cursor, 13)
 		Cursor.pushvector3f4(cursor, val)
 		Cursor.pushu1(cursor, TY_VECTOR)
 	else
@@ -125,7 +132,9 @@ local function pushdiff(cursor: Cursor.Cursor, deltas, new, old)
 		end
 	end
 
-	Cursor.pushvlq(cursor, length)
+	if length > 0 then
+		Cursor.pushvlq(cursor, length)
+	end
 
 	return length
 end
@@ -167,7 +176,7 @@ end
 	Example 2:
 	```lua
 	local oldData = DeepDelta.clone(data)
-	local deltas, DeepDelta.apply(data, diff)
+	local deltas = DeepDelta.apply(data, diff)
 	DataChanged:Fire(data, oldData, deltas)
 	```
 ]]
@@ -219,5 +228,11 @@ function Module.apply(target: any & {}, diff: buffer)
 	popdiff(cursor, target, deltas)
 	return deltas
 end
+
+local a = { "hi" }
+local b = { "bye" }
+local d = Module.diff(a, b)
+local n = Module.apply({}, d)
+print(n[1])
 
 return Module
