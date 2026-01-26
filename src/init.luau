@@ -121,6 +121,7 @@ local function pushdiff(cursor: Cursor.Cursor, deltas, new, old)
 			if len > 0 then
 				deltas[newK] = deltasKey
 				pushvalue(cursor, newK)
+				Cursor.tryrealloc(cursor, 1)
 				Cursor.pushu1(cursor, TY_NEST)
 				length += 1
 			end
