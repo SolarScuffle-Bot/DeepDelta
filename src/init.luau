@@ -229,10 +229,4 @@ function Module.apply(target: any & {}, diff: buffer)
 	return deltas
 end
 
-local a = { "hi" }
-local b = { "bye" }
-local d = Module.diff(a, b)
-local n = Module.apply({}, d)
-print(n[1])
-
 return Module
